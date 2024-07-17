@@ -1,10 +1,6 @@
 using UnityEngine;
 
-struct Vertex
-{
-    public Vector3 Position;
-    public Vector3 Normal;
-}
+
 public class CubeGenerator : MonoBehaviour
 {
     public ComputeShader computeShader;
@@ -104,5 +100,11 @@ public class CubeGenerator : MonoBehaviour
         _vertexBuffer.Release();
         _indexBuffer.Release();
         _argsBuffer.Release();
+    }
+    
+    struct Vertex
+    {
+        public Vector3 Position;
+        public Vector3 Normal;
     }
 }

@@ -481,8 +481,7 @@ MonoBehaviour:
   amplitude: 30
   seedChangeSpeed: 2
   outMeshFilter: {fileID: 1651802964}
-  outCubeMaterial: {fileID: 2100000, guid: 4dec09ea541384e42a36eecd28b55e6a, type: 2}
-  _audioData: {fileID: 1971420559}
+  audioData: {fileID: 1971420559}
 --- !u!23 &1651802963
 MeshRenderer:
   m_ObjectHideFlags: 0
