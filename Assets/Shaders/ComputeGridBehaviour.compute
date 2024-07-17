@@ -1,0 +1,119 @@
+#pragma kernel CSMain
+
+struct Vertex {
+    float3 position;
+    float3 normal;
+};
+
+RWStructuredBuffer<Vertex> vertexBuffer;
+RWStructuredBuffer<uint> indexBuffer;
+RWStructuredBuffer<uint> argsBuffer;
+
+int width;
+int length;
+float gap;
+float seed;
+float amplitude;
+float amplitudeBuffer;
+
+float3 random(float3 p)
+{
+    return frac(sin(p) * 43758.5453);
+}
+
+// Simple Perlin noise function
+float noise(float3 p)
+{
+    float3 i = floor(p);
+    float3 f = frac(p);
+
+    f = f * f * (3.0 - 2.0 * f);
+
+    float n = dot(i, float3(1.0, 57.0, 21.0));
+    float res = lerp(
+        lerp(
+            lerp(dot(random(n + 0.0), f - float3(0.0, 0.0, 0.0)), dot(random(n + 1.0), f - float3(1.0, 0.0, 0.0)), f.x),
+            lerp(dot(random(n + 57.0), f - float3(0.0, 1.0, 0.0)), dot(random(n + 58.0), f - float3(1.0, 1.0, 0.0)), f.x), f.y),
+        lerp(
+            lerp(dot(random(n + 21.0), f - float3(0.0, 0.0, 1.0)), dot(random(n + 22.0), f - float3(1.0, 0.0, 1.0)), f.x),
+            lerp(dot(random(n + 78.0), f - float3(0.0, 1.0, 1.0)), dot(random(n + 79.0), f - float3(1.0, 1.0, 1.0)), f.x), f.y), f.z);
+
+    return res * 0.5 + 0.5; // Normalize to range [0, 1]
+}
+
+
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int cubeIndex = id.x + id.y * width;
+    int vertexOffset = cubeIndex * 8;
+    int indexOffset = cubeIndex * 36;
+
+    float3 baseOffset = float3(id.x * (2.0 + gap), 0.0, id.y * (2.0 + gap));
+
+    
+    float tempAmplitude = lerp(0, 0.3, amplitudeBuffer);
+    
+    float noiseValue = noise(float3(id.x, id.y, seed));
+    noiseValue = pow(noiseValue, -6.0);
+    float noiseAmplitude = noiseValue * tempAmplitude;
+
+    // Smooth transition using lerp
+    amplitude = lerp(0, noiseAmplitude, smoothstep(0.0, 1.0, amplitudeBuffer));
+    
+
+    // Define cube vertices
+    float3 vertices[8] = {
+        float3(-1.0, -1.0, -1.0) + baseOffset,
+        float3(1.0, -1.0, -1.0) + baseOffset,
+        float3(1.0, 1.0 + amplitude, -1.0) + baseOffset,
+        float3(-1.0, 1.0 + amplitude, -1.0) + baseOffset,
+        float3(-1.0, -1.0, 1.0) + baseOffset,
+        float3(1.0, -1.0, 1.0) + baseOffset,
+        float3(1.0, 1.0 + amplitude, 1.0) + baseOffset,
+        float3(-1.0, 1.0 + amplitude, 1.0) + baseOffset
+    };
+
+        // Define cube indices counter-clockwise
+        uint indices[36] = {
+        0, 2, 1, 0, 3, 2, // Back face
+        4, 5, 6, 4, 6, 7, // Front face
+        0, 1, 5, 0, 5, 4, // Bottom face
+        2, 3, 7, 2, 7, 6, // Top face
+        0, 4, 7, 0, 7, 3, // Left face
+        1, 2, 6, 1, 6, 5  // Right face
+    };
+
+    // Define correct normals
+    float3 normals[8] = {
+        float3(-1.0, -1.0, -1.0),
+        float3(1.0, -1.0, -1.0),
+        float3(1.0, 1.0, -1.0),
+        float3(-1.0, 1.0, -1.0),
+        float3(-1.0, -1.0, 1.0),
+        float3(1.0, -1.0, 1.0),
+        float3(1.0, 1.0, 1.0),
+        float3(-1.0, 1.0, 1.0)
+    };
+
+    for (uint i = 0; i < 8; i++)
+    {
+        vertexBuffer[vertexOffset + i].position = vertices[i];
+        vertexBuffer[vertexOffset + i].normal = normalize(normals[i]);
+    }
+
+    for (uint i = 0; i < 36; i++)
+    {
+        indexBuffer[indexOffset + i] = indices[i] + vertexOffset;
+    }
+    
+    if (id.x == 0 && id.y == 0)
+    {
+        argsBuffer[0] = width * length * 36; // Index count
+        argsBuffer[1] = 1;  // Instance count
+        argsBuffer[2] = 0;  // Start index location
+        argsBuffer[3] = 0;  // Base vertex location
+        argsBuffer[4] = 0;  // Start instance location
+    }
+}

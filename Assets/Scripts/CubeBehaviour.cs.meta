@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 20197a998cda5e1498e8da4b638bf81e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - computeShader: {fileID: 7200000, guid: 5fff96d738486ce40aceffddfbaaa887, type: 3}
+  - outMeshFilter: {instanceID: 0}
+  - outCubeMaterial: {instanceID: 0}
+  - _audioData: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
