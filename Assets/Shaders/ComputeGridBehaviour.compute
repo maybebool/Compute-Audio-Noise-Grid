@@ -53,14 +53,14 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     float3 baseOffset = float3(id.x * (2.0 + gap), 0.0, id.y * (2.0 + gap));
 
     
-    float tempAmplitude = lerp(0, 0.3, amplitudeBuffer);
+    float tempAmplitude = lerp(0, 1, amplitudeBuffer);
     
     float noiseValue = noise(float3(id.x, id.y, seed));
-    noiseValue = pow(noiseValue, -6.0);
+    noiseValue = pow(noiseValue, -5.0);
     float noiseAmplitude = noiseValue * tempAmplitude;
 
     // Smooth transition using lerp
-    amplitude = lerp(0, noiseAmplitude, smoothstep(0.0, 1.0, amplitudeBuffer));
+    amplitude = lerp(10, noiseAmplitude, smoothstep(0.0, 1.0, amplitudeBuffer));
     
 
     // Define cube vertices
