@@ -526,14 +526,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   computeShader: {fileID: 7200000, guid: 5fff96d738486ce40aceffddfbaaa887, type: 3}
-  width: 10
-  length: 10
-  gap: 0.5
+  width: 48
+  length: 48
+  gap: 0
   seed: 0
-  amplitude: 0
-  seedChangeSpeed: 1
-  outMeshFilter: {fileID: 0}
-  audioData: {fileID: 0}
+  amplitude: 5
+  seedChangeSpeed: 2
+  outMeshFilter: {fileID: 1651802964}
+  audioData: {fileID: 1971420559}
 --- !u!1 &1971420558
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,12 +565,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bandCount: 8
+  audioSource: {fileID: 1971420560}
+  audioClip: {fileID: 8300000, guid: 5c10c7a9b82e9324d828b747ce405ce2, type: 3}
   audioBand: []
   audioBandBuffer: []
   amplitude: 0
   amplitudeBuffer: 0
-  audioSource: {fileID: 1971420560}
-  audioClip: {fileID: 8300000, guid: 5c10c7a9b82e9324d828b747ce405ce2, type: 3}
 --- !u!82 &1971420560
 AudioSource:
   m_ObjectHideFlags: 0

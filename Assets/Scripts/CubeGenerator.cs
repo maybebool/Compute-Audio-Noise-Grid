@@ -1,8 +1,8 @@
 using UnityEngine;
 
 
-public class CubeGenerator : MonoBehaviour
-{
+public class CubeGenerator : MonoBehaviour {
+    
     public ComputeShader computeShader;
     public int width = 10;
     public int length = 10;
@@ -18,21 +18,20 @@ public class CubeGenerator : MonoBehaviour
     private ComputeBuffer _argsBuffer;
     private int _kernelHandle;
     private Mesh _mesh;
-    
-    
-    private static readonly int VertexBuffer = Shader.PropertyToID("vertexBuffer");
-    private static readonly int IndexBuffer = Shader.PropertyToID("indexBuffer");
-    private static readonly int ArgsBuffer = Shader.PropertyToID("argsBuffer");
+
+
     private static readonly int Width = Shader.PropertyToID("width");
     private static readonly int Length = Shader.PropertyToID("length");
     private static readonly int Gap = Shader.PropertyToID("gap");
     private static readonly int Seed = Shader.PropertyToID("seed");
-    private static readonly int AmplitudeBuffer = Shader.PropertyToID("amplitudeBuffer");
     private static readonly int Amplitude = Shader.PropertyToID("amplitude");
+    private static readonly int AmplitudeBuffer = Shader.PropertyToID("amplitudeBuffer");
+    private static readonly int VertexBuffer = Shader.PropertyToID("vertexBuffer");
+    private static readonly int IndexBuffer = Shader.PropertyToID("indexBuffer");
+    private static readonly int ArgsBuffer = Shader.PropertyToID("argsBuffer");
 
 
-    private void Start()
-    {
+    private void Start() {
         _kernelHandle = computeShader.FindKernel("CSMain");
 
         var cubeCount = width * length;
@@ -58,18 +57,16 @@ public class CubeGenerator : MonoBehaviour
         GetComponent<MeshRenderer>().material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
     }
 
-    private void Update()
-    {
+    private void Update() {
         seed += Time.deltaTime * seedChangeSpeed;
         computeShader.SetFloat(Seed, seed);
         computeShader.SetFloat(AmplitudeBuffer, audioData.amplitudeBuffer);
         computeShader.SetFloat(Amplitude, amplitude);
-        computeShader.Dispatch(_kernelHandle, width, length, 1);
+        computeShader.Dispatch(_kernelHandle, width / 8 , length / 8, 1);
         UpdateMesh();
     }
 
-    private void UpdateMesh()
-    {
+    private void UpdateMesh() {
         var cubeCount = width * length;
         var vertexCount = cubeCount * 8;
         var indexCount = cubeCount * 36;
@@ -82,8 +79,7 @@ public class CubeGenerator : MonoBehaviour
 
         var meshVertices = new Vector3[vertexCount];
         var meshNormals = new Vector3[vertexCount];
-        for (int i = 0; i < vertexCount; i++)
-        {
+        for (int i = 0; i < vertexCount; i++) {
             meshVertices[i] = vertices[i].Position;
             meshNormals[i] = vertices[i].Normal;
         }
@@ -95,15 +91,13 @@ public class CubeGenerator : MonoBehaviour
         outMeshFilter.mesh = _mesh;
     }
 
-    private void OnDestroy()
-    {
+    private void OnDestroy() {
         _vertexBuffer.Release();
         _indexBuffer.Release();
         _argsBuffer.Release();
     }
-    
-    struct Vertex
-    {
+
+    struct Vertex {
         public Vector3 Position;
         public Vector3 Normal;
     }

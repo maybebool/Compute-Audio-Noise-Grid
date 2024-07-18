@@ -10,18 +10,21 @@ public class SpectrumBandData {
 [RequireComponent(typeof(AudioSource))]
 public class AudioData : MonoBehaviour {
     [SerializeField] private int bandCount = 8;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip audioClip;
+    
     [HideInInspector] public float[] audioBand;
     [HideInInspector] public float[] audioBandBuffer;
     [HideInInspector] public float amplitude;
     [HideInInspector] public float amplitudeBuffer;
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip audioClip;
+    
     private float[] _samples = new float[512];
     private float _amplitudeHighest;
     private float _audioProfile;
     private SpectrumBandData _spectrumBandData = new();
-    
     private const float UpperThreshold = 10;
+    
+    
     private void Start() {
         _audioProfile = 0.5f;
         audioBand = new float[bandCount];
@@ -38,7 +41,7 @@ public class AudioData : MonoBehaviour {
         GenerateFrequencyFilters();
         CalculateBandBuffer();
         GenerateAudioBands();
-        GetAmplitude();
+        GetAmplitudeBuffer();
     }
     
     private void AudioProfile(float audioProfile) {
@@ -96,7 +99,7 @@ public class AudioData : MonoBehaviour {
     }
     
     
-    private void GetAmplitude() {
+    private void GetAmplitudeBuffer() {
         float currentAmplitude = 0;
         float currentAmplitudeBuffer = 0;
         for (int i = 0; i < bandCount; i++) {

@@ -43,7 +43,7 @@ float noise(float3 p)
 
 
 
-[numthreads(1, 1, 1)]
+[numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
     int cubeIndex = id.x + id.y * width;
@@ -51,10 +51,8 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     int indexOffset = cubeIndex * 36;
 
     float3 baseOffset = float3(id.x * (2.0 + gap), 0.0, id.y * (2.0 + gap));
-
     
     float tempAmplitude = lerp(0, 1, amplitudeBuffer);
-    
     float noiseValue = noise(float3(id.x, id.y, seed));
     noiseValue = pow(noiseValue, -5.0);
     float noiseAmplitude = noiseValue * tempAmplitude;
@@ -85,7 +83,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         1, 2, 6, 1, 6, 5  // Right face
     };
 
-    // Define correct normals
+    // Define normals
     float3 normals[8] = {
         float3(-1.0, -1.0, -1.0),
         float3(1.0, -1.0, -1.0),
