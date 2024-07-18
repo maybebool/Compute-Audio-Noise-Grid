@@ -5,12 +5,10 @@ public class SpectrumBandData {
     public float[] BandBuffer { get; } = new float[8];
     public float[] BufferReduction { get; } = new float[8];
     public float[] FrequencyBandHighest { get; } = new float[8];
-    public float[] LastAcceptedBandValue { get; } = new float[8];
 }
 
 [RequireComponent(typeof(AudioSource))]
 public class AudioData : MonoBehaviour {
-    private SpectrumBandData _spectrumBandData = new();
     [SerializeField] private int bandCount = 8;
     [HideInInspector] public float[] audioBand;
     [HideInInspector] public float[] audioBandBuffer;
@@ -21,7 +19,9 @@ public class AudioData : MonoBehaviour {
     private float[] _samples = new float[512];
     private float _amplitudeHighest;
     private float _audioProfile;
-    private const float Threshold = 5;
+    private SpectrumBandData _spectrumBandData = new();
+    
+    private const float UpperThreshold = 10;
     private void Start() {
         _audioProfile = 0.5f;
         audioBand = new float[bandCount];
@@ -39,10 +39,6 @@ public class AudioData : MonoBehaviour {
         CalculateBandBuffer();
         GenerateAudioBands();
         GetAmplitude();
-        for (int i = 0; i < 8; i++) {
-            
-            Debug.Log(_spectrumBandData.FrequencyBandHighest.GetValue(i));
-        }
     }
     
     private void AudioProfile(float audioProfile) {
@@ -65,6 +61,14 @@ public class AudioData : MonoBehaviour {
             _spectrumBandData.FrequencyBand[i] = CalculateSampleAverage(i, count, sampleCount) * 10;
             count += sampleCount;
         }
+    }
+    
+    private float CalculateSampleAverage(int i, int start, int sampleCount) {
+        float total = 0;
+        for (int j = start; j < start + sampleCount; j++) {
+            total += (_samples[j] + _samples[j]) * (j + 1);
+        }
+        return total / sampleCount;
     }
     
     private void CalculateBandBuffer() {
@@ -119,11 +123,5 @@ public class AudioData : MonoBehaviour {
         return Mathf.Clamp((band[i] / _spectrumBandData.FrequencyBandHighest[i]), 0, 1);
     }
     
-    private float CalculateSampleAverage(int i, int start, int sampleCount) {
-        float total = 0;
-        for (int j = start; j < start + sampleCount; j++) {
-            total += (_samples[j] + _samples[j]) * (j + 1);
-        }
-        return total / sampleCount;
-    }
+    
 }
