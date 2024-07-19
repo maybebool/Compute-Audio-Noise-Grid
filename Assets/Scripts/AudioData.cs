@@ -66,6 +66,7 @@ public class AudioData : MonoBehaviour {
         }
     }
     
+    
     private float CalculateSampleAverage(int i, int start, int sampleCount) {
         float total = 0;
         for (int j = start; j < start + sampleCount; j++) {

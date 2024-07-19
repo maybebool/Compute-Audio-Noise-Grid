@@ -18,8 +18,7 @@ public class CubeGenerator : MonoBehaviour {
     private ComputeBuffer _argsBuffer;
     private int _kernelHandle;
     private Mesh _mesh;
-
-
+    
     private static readonly int Width = Shader.PropertyToID("width");
     private static readonly int Length = Shader.PropertyToID("length");
     private static readonly int Gap = Shader.PropertyToID("gap");

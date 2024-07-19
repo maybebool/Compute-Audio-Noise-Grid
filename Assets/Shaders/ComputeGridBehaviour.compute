@@ -42,7 +42,6 @@ float noise(float3 p)
 }
 
 
-
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
@@ -54,10 +53,11 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     
     float tempAmplitude = lerp(0, 1, amplitudeBuffer);
     float noiseValue = noise(float3(id.x, id.y, seed));
-    noiseValue = pow(noiseValue, -5.0);
+    noiseValue = pow(abs(noiseValue), -5.0);
+    
     float noiseAmplitude = noiseValue * tempAmplitude;
 
-    // Smooth transition using lerp
+    // Smooth transition using lerp and smoothstep
     amplitude = lerp(10, noiseAmplitude, smoothstep(0.0, 1.0, amplitudeBuffer));
     
 
@@ -95,15 +95,15 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         float3(-1.0, 1.0, 1.0)
     };
 
-    for (uint i = 0; i < 8; i++)
+    for (uint a = 0; a < 8; a++)
     {
-        vertexBuffer[vertexOffset + i].position = vertices[i];
-        vertexBuffer[vertexOffset + i].normal = normalize(normals[i]);
+        vertexBuffer[vertexOffset + a].position = vertices[a];
+        vertexBuffer[vertexOffset + a].normal = normalize(normals[a]);
     }
 
-    for (uint i = 0; i < 36; i++)
+    for (uint b = 0; b < 36; b++)
     {
-        indexBuffer[indexOffset + i] = indices[i] + vertexOffset;
+        indexBuffer[indexOffset + b] = indices[b] + vertexOffset;
     }
     
     if (id.x == 0 && id.y == 0)
