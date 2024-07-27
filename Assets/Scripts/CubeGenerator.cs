@@ -90,6 +90,14 @@ public class CubeGenerator : MonoBehaviour {
         outMeshFilter.mesh = _mesh;
     }
 
+    /// <summary>
+    /// Called when the GameObject is being destroyed.
+    /// Releases the ComputeBuffers used by the CubeGenerator.
+    /// </summary>
+    /// <remarks>
+    /// This method releases the ComputeBuffers used by the CubeGenerator to avoid memory leaks.
+    /// It is automatically called by Unity when the GameObject is being destroyed.
+    /// </remarks>
     private void OnDestroy() {
         _vertexBuffer.Release();
         _indexBuffer.Release();
