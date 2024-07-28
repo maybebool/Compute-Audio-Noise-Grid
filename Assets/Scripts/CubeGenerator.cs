@@ -65,6 +65,16 @@ public class CubeGenerator : MonoBehaviour {
         UpdateMesh();
     }
 
+
+    /// <summary>
+    /// Updates the MeshFilter's mesh with the data from the ComputeBuffers.
+    /// </summary>
+    /// <remarks>
+    /// This method retrieves the data from the ComputeBuffers and updates the MeshFilter's mesh.
+    /// It first retrieves the data from the ComputeBuffers and converts it into arrays of vertices and indices.
+    /// Then, it updates the vertices, normals, and triangles of the Mesh object.
+    /// Finally, it assigns the updated mesh to the MeshFilter component of the GameObject.
+    /// </remarks>
     private void UpdateMesh() {
         var cubeCount = width * length;
         var vertexCount = cubeCount * 8;
