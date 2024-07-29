@@ -74,7 +74,10 @@ public class AudioData : MonoBehaviour {
         }
         return total / sampleCount;
     }
-    
+
+    /// <summary>
+    /// Calculate the band buffer for each frequency band.
+    /// </summary>
     private void CalculateBandBuffer() {
         for (int i = 0; i < bandCount; ++i) {
             var frequencyBand = _spectrumBandData.FrequencyBand[i];
