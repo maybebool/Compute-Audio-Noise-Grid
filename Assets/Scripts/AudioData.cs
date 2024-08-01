@@ -65,8 +65,15 @@ public class AudioData : MonoBehaviour {
             count += sampleCount;
         }
     }
-    
-    
+
+
+    /// <summary>
+    /// Calculate the average sample value for a specific frequency band.
+    /// </summary>
+    /// <param name="i">The index of the frequency band.</param>
+    /// <param name="start">The start index of the sample values in the audio data.</param>
+    /// <param name="sampleCount">The number of sample values to calculate the average from.</param>
+    /// <returns>The average sample value for the specified frequency band.</returns>
     private float CalculateSampleAverage(int i, int start, int sampleCount) {
         float total = 0;
         for (int j = start; j < start + sampleCount; j++) {
@@ -75,8 +82,9 @@ public class AudioData : MonoBehaviour {
         return total / sampleCount;
     }
 
+
     /// <summary>
-    /// Calculate the band buffer for each frequency band.
+    /// Calculate the band buffer value for each frequency band based on the spectrum data.
     /// </summary>
     private void CalculateBandBuffer() {
         for (int i = 0; i < bandCount; ++i) {
@@ -93,7 +101,10 @@ public class AudioData : MonoBehaviour {
             _spectrumBandData.BandBuffer[i] -= bufferReduction;
         }
     }
-    
+
+    /// <summary>
+    /// Generate the audio bands based on the frequency data.
+    /// </summary>
     private void GenerateAudioBands() {
         for (int i = 0; i < bandCount; i++) {
             UpdateHighestFrequency(i);
@@ -101,8 +112,11 @@ public class AudioData : MonoBehaviour {
             audioBandBuffer[i] = CalculateBand(i, _spectrumBandData.BandBuffer);
         }
     }
-    
-    
+
+
+    /// <summary>
+    /// Calculate the amplitude buffer based on the audio band values.
+    /// </summary>
     private void GetAmplitudeBuffer() {
         float currentAmplitude = 0;
         float currentAmplitudeBuffer = 0;
@@ -118,14 +132,24 @@ public class AudioData : MonoBehaviour {
         amplitude = currentAmplitude / _amplitudeHighest;
         amplitudeBuffer = currentAmplitudeBuffer / _amplitudeHighest;
     }
-    
 
+
+    /// <summary>
+    /// Update the highest frequency value for a specific band in the given SpectrumBandData object.
+    /// </summary>
+    /// <param name="i">The index of the band to update.</param>
     private void UpdateHighestFrequency(int i) {
         if (_spectrumBandData.FrequencyBand[i] > _spectrumBandData.FrequencyBandHighest[i]) {
             _spectrumBandData.FrequencyBandHighest[i] = _spectrumBandData.FrequencyBand[i];
         }
     }
 
+    /// <summary>
+    /// Calculate the value for a specific frequency band based on the given band data.
+    /// </summary>
+    /// <param name="i">The index of the frequency band.</param>
+    /// <param name="band">The array containing the band data.</param>
+    /// <returns>The calculated value for the specified frequency band.</returns>
     private float CalculateBand(int i, float[] band) {
         return Mathf.Clamp((band[i] / _spectrumBandData.FrequencyBandHighest[i]), 0, 1);
     }
