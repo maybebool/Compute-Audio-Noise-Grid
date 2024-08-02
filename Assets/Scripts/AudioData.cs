@@ -43,17 +43,27 @@ public class AudioData : MonoBehaviour {
         GenerateAudioBands();
         GetAmplitudeBuffer();
     }
-    
+
+    /// <summary>
+    /// Modifies the audio profile by setting the highest frequency band of the SpectrumBandData to the specified value.
+    /// </summary>
+    /// <param name="audioProfile">The value to set as the highest frequency band of the SpectrumBandData.</param>
     private void AudioProfile(float audioProfile) {
         for (int i = 0; i < bandCount; i++) {
             _spectrumBandData.FrequencyBandHighest[i] = audioProfile;
         }
     }
 
+    /// <summary>
+    /// Get the audio spectrum data by calling the `GetSpectrumData` method on the attached AudioSource component.
+    /// </summary>
     private void GetAudioSpectrumData() {
         audioSource.GetSpectrumData(_samples, 0, FFTWindow.BlackmanHarris);
     }
-    
+
+    /// <summary>
+    /// Generate the frequency filters for each frequency band based on the audio spectrum data.
+    /// </summary>
     private void GenerateFrequencyFilters() {
         var count = 0;
         for (int i = 0; i < bandCount; i++) {
