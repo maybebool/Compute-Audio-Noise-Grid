@@ -21,7 +21,12 @@ float3 random(float3 p)
     return frac(sin(p) * 43758.5453);
 }
 
-// Simple Perlin noise function
+/**
+ * @brief Computes the value of noise at a given position.
+ * This method uses a Perlin noise function to generate a value between 0 and 1 at a given position.
+ * @param p The position at which to compute the noise. The position should be a 3D vector.
+ * @return The computed noise value at the given position. The value is normalized to the range [0, 1].
+ */
 float noise(float3 p)
 {
     float3 i = floor(p);
@@ -50,9 +55,13 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     int indexOffset = cubeIndex * 36;
 
     float3 baseOffset = float3(id.x * (2.0 + gap), 0.0, id.y * (2.0 + gap));
-    
+
+    // Hint: maybe we get better results with another variable from the AudioData.cs scripts
+    // than using amplitudeBuffer.
     float tempAmplitude = lerp(0, 1, amplitudeBuffer);
     float noiseValue = noise(float3(id.x, id.y, seed));
+    
+    // Hint: Here we could optimize our code so that the pow method will be unnecessary
     noiseValue = pow(abs(noiseValue), -5.0);
     
     float noiseAmplitude = noiseValue * tempAmplitude;

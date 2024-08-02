@@ -22,6 +22,8 @@ public class AudioData : MonoBehaviour {
     private float _amplitudeHighest;
     private float _audioProfile;
     private SpectrumBandData _spectrumBandData = new();
+    
+    // Hint: try to integrate this unused method in one of the methods
     private const float UpperThreshold = 10;
     
     
@@ -33,8 +35,7 @@ public class AudioData : MonoBehaviour {
         audioSource.clip = audioClip;
         audioSource.Play();
     }
-
-
+    
     private void Update() {
         if (audioSource.clip == null) return;
         GetAudioSpectrumData();
@@ -75,8 +76,7 @@ public class AudioData : MonoBehaviour {
             count += sampleCount;
         }
     }
-
-
+    
     /// <summary>
     /// Calculate the average sample value for a specific frequency band.
     /// </summary>
@@ -91,8 +91,7 @@ public class AudioData : MonoBehaviour {
         }
         return total / sampleCount;
     }
-
-
+    
     /// <summary>
     /// Calculate the band buffer value for each frequency band based on the spectrum data.
     /// </summary>
@@ -142,8 +141,7 @@ public class AudioData : MonoBehaviour {
         amplitude = currentAmplitude / _amplitudeHighest;
         amplitudeBuffer = currentAmplitudeBuffer / _amplitudeHighest;
     }
-
-
+    
     /// <summary>
     /// Update the highest frequency value for a specific band in the given SpectrumBandData object.
     /// </summary>
@@ -163,6 +161,4 @@ public class AudioData : MonoBehaviour {
     private float CalculateBand(int i, float[] band) {
         return Mathf.Clamp((band[i] / _spectrumBandData.FrequencyBandHighest[i]), 0, 1);
     }
-    
-    
 }

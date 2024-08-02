@@ -1,6 +1,4 @@
 using UnityEngine;
-
-
 public class CubeGenerator : MonoBehaviour {
     
     public ComputeShader computeShader;
@@ -53,7 +51,10 @@ public class CubeGenerator : MonoBehaviour {
         // Create the mesh
         _mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = _mesh;
+        // Hint: We could create our own Shader instead of searching one. 
         GetComponent<MeshRenderer>().material = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+        
+        // Hint: Try to generate an effect with your shader, so that the color changes based on the height of the cubes 
     }
 
     private void Update() {
@@ -61,6 +62,8 @@ public class CubeGenerator : MonoBehaviour {
         computeShader.SetFloat(Seed, seed);
         computeShader.SetFloat(AmplitudeBuffer, audioData.amplitudeBuffer);
         computeShader.SetFloat(Amplitude, amplitude);
+        
+        // Hint: Our Dispatch method isn't set up with best practice yet
         computeShader.Dispatch(_kernelHandle, width / 8 , length / 8, 1);
         UpdateMesh();
     }
