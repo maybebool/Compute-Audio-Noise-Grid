@@ -26,7 +26,6 @@ public class AudioData : MonoBehaviour {
     // Hint: try to integrate this unused method in one of the methods
     private const float UpperThreshold = 10;
     
-    
     private void Start() {
         _audioProfile = 0.5f;
         audioBand = new float[bandCount];
@@ -121,8 +120,7 @@ public class AudioData : MonoBehaviour {
             audioBandBuffer[i] = CalculateBand(i, _spectrumBandData.BandBuffer);
         }
     }
-
-
+    
     /// <summary>
     /// Calculate the amplitude buffer based on the audio band values.
     /// </summary>
