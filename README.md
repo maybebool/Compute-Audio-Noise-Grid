@@ -1,7 +1,7 @@
 # Learn how to build audio reactive Compute Shaders
 
 Hey there. This repo is part of my e-learning about computing shaders and using audio sources to create awesome audio visualizers. 
-Please watch the YouTube video first:
+Please watch the YouTube video first: https://youtu.be/Mo5PHCmPs7g
 
 ## How to use this repo
 
